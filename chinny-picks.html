@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Edge Crew - Submit your betting picks">
+    <title>Edge Crew — Submit Picks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #0D0D0D;
+            --green: #006847;
+            --green-light: #008C5E;
+            --red: #C41E3A;
+            --red-dark: #9B1B30;
+            --white: #FFFFFF;
+            --offwhite: #FAFAFA;
+            --gold: #D4A017;
+            --charcoal: #2C2C2C;
+            --text-light: #999;
+            --border: rgba(255,255,255,0.1);
+            --card-bg: #1A1A1A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--black);
+            color: var(--white);
+            min-height: 100vh;
+        }
+
+        /* === NAV === */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(13,13,13,0.95); backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .nav-inner {
+            max-width: 800px; margin: 0 auto; padding: 0 20px;
+            display: flex; align-items: center; justify-content: space-between; height: 56px;
+        }
+        .nav-logo {
+            font-family: 'Playfair Display', serif; font-size: 18px;
+            color: #fff; font-weight: 700; text-decoration: none;
+        }
+        .nav-logo .green { color: var(--green-light); }
+        .nav-logo .red { color: var(--red); }
+        .hamburger {
+            display: flex; flex-direction: column; gap: 5px; cursor: pointer;
+            background: none; border: none; padding: 8px;
+        }
+        .hamburger span {
+            width: 22px; height: 2px; background: var(--white);
+            transition: all 0.3s; border-radius: 1px;
+        }
+        .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+        .mobile-menu {
+            display: none; position: fixed; top: 56px; left: 0; right: 0;
+            background: rgba(13,13,13,0.98); backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding: 16px 20px;
+        }
+        .mobile-menu.open { display: block; }
+        .mobile-menu a {
+            display: block; padding: 12px 0; color: rgba(255,255,255,0.7);
+            font-size: 14px; font-weight: 600; text-decoration: none;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .mobile-menu a:hover { color: var(--gold); }
+
+        /* === MAIN === */
+        .container {
+            max-width: 700px; margin: 0 auto; padding: 76px 20px 40px;
+        }
+
+        /* === HEADER === */
+        .page-header {
+            text-align: center; margin-bottom: 32px;
+            padding-bottom: 24px; border-bottom: 1px solid var(--border);
+        }
+        .page-header h1 {
+            font-family: 'Playfair Display', serif; font-size: 28px;
+            font-weight: 700; margin-bottom: 6px;
+        }
+        .page-header h1 .gold { color: var(--gold); }
+        .page-header p { color: var(--text-light); font-size: 14px; }
+
+        /* === FORM === */
+        .form-section { margin-bottom: 32px; }
+        .form-row {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 12px; margin-bottom: 12px;
+        }
+        .form-row.full { grid-template-columns: 1fr; }
+        .form-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+
+        .field { display: flex; flex-direction: column; }
+        .field label {
+            font-size: 11px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.5px; color: var(--text-light); margin-bottom: 5px;
+        }
+        .field input, .field select, .field textarea {
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 8px; padding: 12px 14px; color: var(--white);
+            font-family: 'Nunito', sans-serif; font-size: 15px;
+            transition: border-color 0.2s; outline: none;
+        }
+        .field input:focus, .field select:focus, .field textarea:focus {
+            border-color: var(--gold);
+        }
+        .field select { cursor: pointer; -webkit-appearance: none; appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 5.5l6.5 6.5 6.5-6.5'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 14px center;
+            padding-right: 36px;
+        }
+        .field select option { background: var(--card-bg); color: var(--white); }
+        .field textarea { resize: vertical; min-height: 60px; }
+
+        /* === BUTTONS === */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            gap: 8px; padding: 12px 24px; border-radius: 8px; font-size: 14px;
+            font-weight: 700; font-family: 'Nunito', sans-serif; cursor: pointer;
+            border: none; transition: all 0.2s; text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .btn-add {
+            background: var(--green); color: var(--white); width: 100%;
+            margin-top: 4px; padding: 14px;
+        }
+        .btn-add:hover { background: var(--green-light); }
+        .btn-submit {
+            background: var(--gold); color: var(--black); width: 100%;
+            padding: 16px; font-size: 16px; margin-top: 16px;
+        }
+        .btn-submit:hover { background: #E8B020; }
+        .btn-submit:disabled {
+            background: #555; color: #888; cursor: not-allowed;
+        }
+        .btn-clear {
+            background: transparent; color: var(--red); border: 1px solid var(--red);
+            padding: 8px 16px; font-size: 12px;
+        }
+        .btn-clear:hover { background: var(--red); color: var(--white); }
+        .btn-remove {
+            background: none; border: none; color: var(--red); cursor: pointer;
+            font-size: 18px; padding: 4px 8px; line-height: 1;
+        }
+        .btn-remove:hover { color: #ff4060; }
+
+        /* === PICK CARDS === */
+        .picks-review { margin-top: 24px; }
+        .picks-review h3 {
+            font-family: 'Playfair Display', serif; font-size: 18px;
+            margin-bottom: 12px; color: var(--gold);
+        }
+        .pick-card {
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px; padding: 14px 16px; margin-bottom: 10px;
+            position: relative;
+        }
+        .pick-card .pick-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 8px;
+        }
+        .pick-card .pick-num {
+            font-size: 11px; font-weight: 700; color: var(--gold);
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .pick-card .pick-matchup {
+            font-size: 16px; font-weight: 700; margin-bottom: 4px;
+        }
+        .pick-card .pick-details {
+            display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px;
+            color: var(--text-light);
+        }
+        .pick-card .pick-details .tag {
+            background: rgba(255,255,255,0.06); padding: 3px 10px;
+            border-radius: 20px; font-size: 12px;
+        }
+        .pick-card .pick-details .tag.confidence-lock {
+            background: rgba(212,160,23,0.2); color: var(--gold); font-weight: 700;
+        }
+        .pick-card .pick-details .tag.confidence-high {
+            background: rgba(0,104,71,0.25); color: var(--green-light);
+        }
+        .pick-card .pick-details .tag.confidence-medium {
+            background: rgba(255,255,255,0.08); color: #ccc;
+        }
+        .pick-card .pick-details .tag.confidence-low {
+            background: rgba(255,255,255,0.04); color: #888;
+        }
+        .pick-card .pick-notes {
+            margin-top: 8px; font-size: 13px; color: #aaa;
+            font-style: italic;
+        }
+
+        /* === HISTORY === */
+        .history-section {
+            margin-top: 48px; padding-top: 32px;
+            border-top: 1px solid var(--border);
+        }
+        .history-section h3 {
+            font-family: 'Playfair Display', serif; font-size: 18px;
+            margin-bottom: 16px; display: flex; justify-content: space-between;
+            align-items: center;
+        }
+        .history-entry {
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px; padding: 14px 16px; margin-bottom: 10px;
+            cursor: pointer; transition: border-color 0.2s;
+        }
+        .history-entry:hover { border-color: rgba(255,255,255,0.15); }
+        .history-entry .hist-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 4px;
+        }
+        .history-entry .hist-date {
+            font-size: 14px; font-weight: 700; color: var(--gold);
+        }
+        .history-entry .hist-count {
+            font-size: 12px; color: var(--text-light);
+        }
+        .history-entry .hist-summary {
+            font-size: 13px; color: #aaa;
+        }
+        .history-detail { display: none; margin-top: 10px; }
+        .history-entry.expanded .history-detail { display: block; }
+        .empty-state {
+            text-align: center; padding: 24px; color: #555; font-size: 14px;
+        }
+
+        /* === TOAST === */
+        .toast {
+            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+            background: var(--green); color: var(--white); padding: 12px 24px;
+            border-radius: 8px; font-size: 14px; font-weight: 600;
+            opacity: 0; transition: opacity 0.3s; pointer-events: none;
+            z-index: 9999;
+        }
+        .toast.show { opacity: 1; }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 500px) {
+            .form-row { grid-template-columns: 1fr; }
+            .form-row.triple { grid-template-columns: 1fr 1fr; }
+            .page-header h1 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+    <div class="nav-inner">
+        <a href="index.html" class="nav-logo">
+            Casa <span class="green">Cuer</span><span class="red">vo</span>
+        </a>
+        <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="chinny-picks.html">Submit Picks</a>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="page-header">
+        <h1>Edge Crew — <span class="gold">Submit Picks</span></h1>
+        <p>Fill it out. Add your picks. Hit send.</p>
+    </div>
+
+    <!-- FORM -->
+    <form id="pickForm" class="form-section" onsubmit="return false;">
+        <div class="form-row">
+            <div class="field">
+                <label>Name</label>
+                <input type="text" id="fName" value="Chinny" required>
+            </div>
+            <div class="field">
+                <label>Date</label>
+                <input type="date" id="fDate" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="field">
+                <label>Sport</label>
+                <select id="fSport" required>
+                    <option value="">Select...</option>
+                    <option>NBA</option>
+                    <option>NHL</option>
+                    <option>MLB</option>
+                    <option>NFL</option>
+                    <option>Soccer</option>
+                    <option>MMA</option>
+                    <option>Tennis</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Pick Type</label>
+                <select id="fType" required>
+                    <option value="">Select...</option>
+                    <option>Spread</option>
+                    <option>Moneyline</option>
+                    <option>Over/Under</option>
+                    <option>Prop</option>
+                    <option>Parlay</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row full">
+            <div class="field">
+                <label>Game / Matchup</label>
+                <input type="text" id="fMatchup" placeholder="e.g. Lakers vs Celtics" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="field">
+                <label>Pick</label>
+                <input type="text" id="fPick" placeholder="e.g. Lakers -3.5" required>
+            </div>
+            <div class="field">
+                <label>Odds</label>
+                <input type="text" id="fOdds" placeholder="e.g. -110">
+            </div>
+        </div>
+        <div class="form-row triple">
+            <div class="field">
+                <label>Units</label>
+                <select id="fUnits">
+                    <option>1</option>
+                    <option>2</option>
+                    <option selected>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Confidence</label>
+                <select id="fConfidence">
+                    <option>Low</option>
+                    <option selected>Medium</option>
+                    <option>High</option>
+                    <option>Lock</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row full">
+            <div class="field">
+                <label>Notes (optional)</label>
+                <textarea id="fNotes" placeholder="Any reasoning, injury news, line movement..."></textarea>
+            </div>
+        </div>
+        <button type="button" class="btn btn-add" onclick="addPick()">+ Add Pick</button>
+    </form>
+
+    <!-- REVIEW -->
+    <div class="picks-review" id="reviewSection" style="display:none;">
+        <h3>Your Picks <span id="pickCount"></span></h3>
+        <div id="pickCards"></div>
+        <button class="btn btn-submit" id="submitBtn" onclick="submitPicks()">Send Picks</button>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="history-section">
+        <h3>
+            Past Submissions
+            <button class="btn btn-clear" onclick="clearHistory()">Clear</button>
+        </h3>
+        <div id="historyList"></div>
+    </div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+    // === STATE ===
+    let picks = [];
+
+    // === INIT ===
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('fDate').value = new Date().toISOString().split('T')[0];
+        renderHistory();
+    });
+
+    // === NAV ===
+    function toggleMenu() {
+        document.querySelector('.hamburger').classList.toggle('open');
+        document.getElementById('mobileMenu').classList.toggle('open');
+    }
+
+    // === ADD PICK ===
+    function addPick() {
+        const f = id => document.getElementById(id);
+        const sport = f('fSport').value;
+        const type = f('fType').value;
+        const matchup = f('fMatchup').value.trim();
+        const pick = f('fPick').value.trim();
+
+        if (!sport || !type || !matchup || !pick) {
+            toast('Fill in Sport, Type, Matchup, and Pick.');
+            return;
+        }
+
+        picks.push({
+            sport,
+            type,
+            matchup,
+            pick,
+            odds: f('fOdds').value.trim() || 'N/A',
+            units: f('fUnits').value,
+            confidence: f('fConfidence').value,
+            notes: f('fNotes').value.trim()
+        });
+
+        // Reset pick-specific fields, keep name/date/sport
+        f('fMatchup').value = '';
+        f('fPick').value = '';
+        f('fOdds').value = '';
+        f('fNotes').value = '';
+        f('fMatchup').focus();
+
+        renderPicks();
+        toast('Pick added.');
+    }
+
+    // === RENDER PICKS ===
+    function renderPicks() {
+        const section = document.getElementById('reviewSection');
+        const container = document.getElementById('pickCards');
+        const count = document.getElementById('pickCount');
+
+        if (picks.length === 0) {
+            section.style.display = 'none';
+            return;
+        }
+
+        section.style.display = 'block';
+        count.textContent = `(${picks.length})`;
+
+        container.innerHTML = picks.map((p, i) => `
+            <div class="pick-card">
+                <div class="pick-header">
+                    <span class="pick-num">Pick #${i + 1} — ${p.sport}</span>
+                    <button class="btn-remove" onclick="removePick(${i})" title="Remove">&times;</button>
+                </div>
+                <div class="pick-matchup">${esc(p.matchup)}</div>
+                <div class="pick-details">
+                    <span class="tag">${esc(p.type)}</span>
+                    <span class="tag">${esc(p.pick)}</span>
+                    <span class="tag">${esc(p.odds)}</span>
+                    <span class="tag">${p.units}U</span>
+                    <span class="tag confidence-${p.confidence.toLowerCase()}">${p.confidence}</span>
+                </div>
+                ${p.notes ? `<div class="pick-notes">"${esc(p.notes)}"</div>` : ''}
+            </div>
+        `).join('');
+    }
+
+    function removePick(i) {
+        picks.splice(i, 1);
+        renderPicks();
+    }
+
+    // === SUBMIT ===
+    function submitPicks() {
+        if (picks.length === 0) return;
+
+        const name = document.getElementById('fName').value.trim() || 'Unknown';
+        const date = document.getElementById('fDate').value;
+        const subject = `Edge Crew Pick — ${date}`;
+
+        // Build email body
+        let body = `Edge Crew Picks\n`;
+        body += `From: ${name}\n`;
+        body += `Date: ${date}\n`;
+        body += `Total Picks: ${picks.length}\n`;
+        body += `${'='.repeat(40)}\n\n`;
+
+        picks.forEach((p, i) => {
+            body += `PICK #${i + 1}\n`;
+            body += `Sport: ${p.sport}\n`;
+            body += `Type: ${p.type}\n`;
+            body += `Matchup: ${p.matchup}\n`;
+            body += `Pick: ${p.pick}\n`;
+            body += `Odds: ${p.odds}\n`;
+            body += `Units: ${p.units}\n`;
+            body += `Confidence: ${p.confidence}\n`;
+            if (p.notes) body += `Notes: ${p.notes}\n`;
+            body += `${'-'.repeat(30)}\n\n`;
+        });
+
+        // Save to localStorage
+        saveToHistory(name, date, [...picks]);
+
+        // Open mailto
+        const mailto = `mailto:gcesintonia@gmail.com?subject=${enc(subject)}&body=${enc(body)}`;
+        window.location.href = mailto;
+
+        toast('Picks saved and email opened.');
+
+        // Reset
+        picks = [];
+        renderPicks();
+    }
+
+    // === HISTORY ===
+    function getHistory() {
+        try { return JSON.parse(localStorage.getItem('edgecrew_picks') || '[]'); }
+        catch { return []; }
+    }
+
+    function saveToHistory(name, date, picksList) {
+        const history = getHistory();
+        history.unshift({
+            id: Date.now(),
+            name,
+            date,
+            picks: picksList,
+            submitted: new Date().toISOString()
+        });
+        // Keep last 50
+        if (history.length > 50) history.length = 50;
+        localStorage.setItem('edgecrew_picks', JSON.stringify(history));
+        renderHistory();
+    }
+
+    function renderHistory() {
+        const container = document.getElementById('historyList');
+        const history = getHistory();
+
+        if (history.length === 0) {
+            container.innerHTML = '<div class="empty-state">No past submissions yet.</div>';
+            return;
+        }
+
+        container.innerHTML = history.map(h => {
+            const sports = [...new Set(h.picks.map(p => p.sport))].join(', ');
+            const picksHtml = h.picks.map((p, i) => `
+                <div class="pick-card" style="margin-top:8px;">
+                    <div class="pick-header">
+                        <span class="pick-num">Pick #${i+1} — ${p.sport}</span>
+                    </div>
+                    <div class="pick-matchup">${esc(p.matchup)}</div>
+                    <div class="pick-details">
+                        <span class="tag">${esc(p.type)}</span>
+                        <span class="tag">${esc(p.pick)}</span>
+                        <span class="tag">${esc(p.odds)}</span>
+                        <span class="tag">${p.units}U</span>
+                        <span class="tag confidence-${p.confidence.toLowerCase()}">${p.confidence}</span>
+                    </div>
+                    ${p.notes ? `<div class="pick-notes">"${esc(p.notes)}"</div>` : ''}
+                </div>
+            `).join('');
+
+            return `
+                <div class="history-entry" onclick="this.classList.toggle('expanded')">
+                    <div class="hist-header">
+                        <span class="hist-date">${h.date}</span>
+                        <span class="hist-count">${h.picks.length} pick${h.picks.length > 1 ? 's' : ''}</span>
+                    </div>
+                    <div class="hist-summary">${h.name} — ${sports}</div>
+                    <div class="history-detail">${picksHtml}</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function clearHistory() {
+        if (confirm('Clear all past submissions?')) {
+            localStorage.removeItem('edgecrew_picks');
+            renderHistory();
+            toast('History cleared.');
+        }
+    }
+
+    // === UTIL ===
+    function esc(s) {
+        const d = document.createElement('div');
+        d.textContent = s;
+        return d.innerHTML;
+    }
+    function enc(s) { return encodeURIComponent(s); }
+    function toast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2500);
+    }
+</script>
+</body>
+</html>
