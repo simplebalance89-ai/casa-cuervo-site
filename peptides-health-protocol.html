@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peptides & Health Protocol — Peter Wilson</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0D1B2A;
+    --navy-light: #1B2D45;
+    --gold: #D4A017;
+    --gold-light: #E8C547;
+    --cream: #FAF8F5;
+    --white: #FFFFFF;
+    --green: #2ECC71;
+    --red: #E74C3C;
+    --orange: #F39C12;
+    --gray: #8899AA;
+    --text: #E0E0E0;
+    --text-muted: #99AABB;
+    --card-bg: #162032;
+    --border: #2A3A4E;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--navy);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    border-bottom: 3px solid var(--gold);
+    padding: 40px 0 32px;
+    text-align: center;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  header p {
+    color: var(--text-muted);
+    font-size: 1rem;
+  }
+  header .date {
+    color: var(--gray);
+    font-size: 0.85rem;
+    margin-top: 6px;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--navy-light);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  nav .container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  nav a:hover { color: var(--gold); border-color: var(--gold); }
+
+  /* SECTIONS */
+  section { padding: 40px 0; }
+  section + section { border-top: 1px solid var(--border); }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  h3 {
+    font-size: 1.15rem;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  /* REGULATORY ALERT */
+  .alert {
+    background: rgba(231, 76, 60, 0.1);
+    border: 1px solid var(--red);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 30px;
+  }
+  .alert h3 { color: var(--red); }
+  .alert p { font-size: 0.92rem; }
+  .alert ul { margin: 10px 0 0 20px; font-size: 0.9rem; }
+  .alert li { margin-bottom: 4px; }
+
+  /* PEPTIDE CARDS */
+  .peptide-grid { display: flex; flex-direction: column; gap: 24px; }
+  .peptide-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    transition: border-color 0.2s;
+  }
+  .peptide-card:hover { border-color: var(--gold); }
+  .peptide-card .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .peptide-card .card-header h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--gold-light);
+    margin: 0;
+  }
+  .badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-green { background: rgba(46,204,113,0.15); color: var(--green); border: 1px solid var(--green); }
+  .badge-orange { background: rgba(243,156,18,0.15); color: var(--orange); border: 1px solid var(--orange); }
+  .badge-red { background: rgba(231,76,60,0.15); color: var(--red); border: 1px solid var(--red); }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 14px;
+  }
+  @media (max-width: 700px) { .detail-grid { grid-template-columns: 1fr; } }
+  .detail-item label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 3px;
+    letter-spacing: 0.5px;
+  }
+  .detail-item p { font-size: 0.9rem; color: var(--text); }
+  .detail-item.full { grid-column: 1 / -1; }
+
+  /* STACKS */
+  .stack-card {
+    background: var(--card-bg);
+    border: 1px solid var(--gold);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 14px;
+  }
+  .stack-card h3 { color: var(--gold-light); font-size: 1.05rem; }
+  .stack-card p { font-size: 0.9rem; margin-top: 6px; }
+
+  /* LEGAL TABLE */
+  .table-wrap { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin-top: 10px;
+  }
+  th {
+    background: var(--navy-light);
+    color: var(--gold);
+    text-align: left;
+    padding: 10px 14px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--gold);
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:hover td { background: rgba(212,160,23,0.04); }
+
+  /* GROCERY */
+  .grocery-section {
+    margin-bottom: 28px;
+  }
+  .grocery-section h3 {
+    color: var(--gold);
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .grocery-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 20px;
+  }
+  @media (max-width: 600px) { .grocery-grid { grid-template-columns: 1fr; } }
+  .grocery-item {
+    font-size: 0.9rem;
+    padding: 4px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .grocery-item .check {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--gold);
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 3px;
+    cursor: pointer;
+  }
+  .grocery-item .check.checked {
+    background: var(--gold);
+  }
+  .grocery-item .note { color: var(--text-muted); font-size: 0.82rem; }
+
+  /* MACROS TABLE */
+  .macro-table { margin-top: 16px; }
+  .macro-table td:first-child { font-weight: 700; color: var(--gold-light); }
+
+  .nonneg {
+    background: rgba(212,160,23,0.08);
+    border: 1px solid var(--gold);
+    border-radius: 10px;
+    padding: 18px 24px;
+    margin-top: 20px;
+  }
+  .nonneg h3 { color: var(--gold); font-size: 1rem; margin-bottom: 8px; }
+  .nonneg ul { margin-left: 18px; font-size: 0.9rem; }
+  .nonneg li { margin-bottom: 4px; }
+
+  /* VENDORS */
+  .vendor-list { list-style: none; }
+  .vendor-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+  .vendor-list li strong { color: var(--gold-light); }
+
+  /* FOOTER */
+  footer {
+    background: var(--navy-light);
+    border-top: 2px solid var(--gold);
+    padding: 24px 0;
+    text-align: center;
+    color: var(--gray);
+    font-size: 0.82rem;
+  }
+
+  /* PRINT */
+  @media print {
+    body { background: #fff; color: #222; }
+    .peptide-card, .stack-card, .alert, .nonneg { border-color: #ccc; background: #fafafa; }
+    nav { display: none; }
+    h2, h3, .badge, label { color: #333 !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1>Peptides & Health Protocol</h1>
+    <p>10 peptides researched. Full grocery list. No fluff.</p>
+    <div class="date">February 25, 2026 — Built by Sinton.ia</div>
+  </div>
+</header>
+
+<nav>
+  <div class="container">
+    <a href="#regulatory">Regulatory</a>
+    <a href="#bpc157">BPC-157</a>
+    <a href="#tb500">TB-500</a>
+    <a href="#cjc1295">CJC-1295</a>
+    <a href="#ipamorelin">Ipamorelin</a>
+    <a href="#ghkcu">GHK-Cu</a>
+    <a href="#thymosin">Thymosin A1</a>
+    <a href="#glp1">Sema/Tirz</a>
+    <a href="#pt141">PT-141</a>
+    <a href="#sermorelin">Sermorelin</a>
+    <a href="#dsip">DSIP</a>
+    <a href="#stacks">Stacks</a>
+    <a href="#legal">Legal Table</a>
+    <a href="#grocery">Grocery List</a>
+    <a href="#macros">Macros</a>
+  </div>
+</nav>
+
+<!-- REGULATORY -->
+<section id="regulatory">
+  <div class="container">
+    <div class="alert">
+      <h3>FDA Regulatory Reality — Feb 2026</h3>
+      <p>The FDA cracked down hard in 2025-2026. Know the landscape before you buy anything.</p>
+      <ul>
+        <li><strong>BPC-157, TB-500, CJC-1295, Ipamorelin, AOD-9604</strong> — Category 2 (Safety Concerns). Compounding pharmacies <strong>cannot legally compound</strong> these for human use.</li>
+        <li><strong>Semaglutide, Tirzepatide, Sermorelin, Tesamorelin</strong> — FDA-approved. Available via prescription.</li>
+        <li><strong>PT-141</strong> — FDA-approved as Vyleesi (women HSDD). Off-label for men via physician.</li>
+        <li><strong>GHK-Cu</strong> — OTC in topical skincare. Injectable is gray market.</li>
+        <li><strong>Thymosin Alpha-1</strong> — Approved in 35+ countries. Category 1 in US (eligible for compounding).</li>
+        <li><strong>DSIP</strong> — Not FDA-approved. Research peptide only.</li>
+      </ul>
+      <p style="margin-top:12px;"><strong>Bottom line:</strong> The "research chemical" loophole is closing. FDA referring mass-marketing compounders to DOJ. For legal and clean — go through a licensed telehealth clinic or prescribing physician for the approved ones. Gray market is on you.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PEPTIDE CARDS -->
+<section id="peptides">
+  <div class="container">
+    <h2>The Peptides</h2>
+    <div class="peptide-grid">
+
+      <!-- 1. BPC-157 -->
+      <div class="peptide-card" id="bpc157">
+        <div class="card-header">
+          <h3>1. BPC-157 — Body Protection Compound</h3>
+          <span class="badge badge-red">Gray Market</span>
+        </div>
+        <p>Derived from stomach acid protein. Promotes tissue healing, angiogenesis, fibroblast activity, collagen remodeling. Downregulates inflammatory cytokines. The "Wolverine peptide" when stacked with TB-500.</p>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <label>Benefits</label>
+            <p>Gut healing, tendon/ligament repair, muscle recovery, joint pain, neuroprotection, reduces inflammation</p>
+          </div>
+          <div class="detail-item">
+            <label>Side Effects</label>
+            <p>Very well-tolerated. Mild: fatigue during adaptation, injection site irritation, transient nausea</p>
+          </div>
+          <div class="detail-item">
+            <label>Dosing</label>
+            <p>250-500 mcg/day subQ. 4-8 weeks on, 2-4 weeks off. Inject near injury site or abdomen for systemic</p>
+          </div>
+          <div class="detail-item">
+            <label>Cost</label>
+            <p>$30-60 per 5mg vial (research). Clinic was $150-400/mo when available</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. TB-500 -->
+      <div class="peptide-card" id="tb500">
+        <div class="card-header">
+          <h3>2. TB-500 — Thymosin Beta-4 Fragment</h3>
+          <span class="badge badge-red">Gray Market</span>
+        </div>
+        <p>Synthetic Thymosin Beta-4. Promotes actin production, cell migration, blood vessel formation. Stacks synergistically with BPC-157 ("Wolverine Stack").</p>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <label>Benefits</label>
+            <p>Muscle/tendon/ligament healing, cardiac tissue repair, hair regrowth, reduced scarring, flexibility</p>
+          </div>
+          <div class="detail-item">
+            <label>Side Effects</label>
+            <p>Mild: headache, nausea, injection site reactions, temporary lethargy. Generally well-tolerated</p>
+          </div>
+          <div class="detail-item">
+            <label>Dosing</label>
+            <p>Loading: 750 mcg 2x/week for 4-6 weeks. Maintenance: 750 mcg 1x/week</p>
+          </div>
+          <div class="detail-item">
+            <label>Cost</label>
+            <p>$40-70 per 5mg vial (research grade)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. CJC-1295 -->
+      <div class="peptide-card" id="cjc1295">
+        <div class="card-header">
+          <h3>3. CJC-1295 — Growth Hormone Releaser</h3>
+          <span class="badge badge-red">Gray Market</span>
+        </div>
+        <p>Synthetic GHRH analog. Increases natural GH and IGF-1 secretion. "With DAC" version has longer half-life (days vs hours). Best paired with Ipamorelin.</p>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <label>Benefits</label>
+            <p>Lean muscle, fat loss, improved sleep, faster recovery, skin quality, bone density</p>
+          </div>
+          <div class="detail-item">
+            <label>Side Effects</label>
+            <p>Water retention, numbness/tingling, joint pain, headache, flushing. Theoretical cancer concern (broad cell growth)</p>
+          </div>
+          <div class="detail-item">
+            <label>Dosing</label>
+            <p>No DAC: 100-300 mcg before bed, 5 on / 2 off. With DAC: 2mg 1x/week. Combine with Ipamorelin</p>
+          </div>
+          <div class="detail-item">
+            <label>Cost</label>
+            <p>$35-60 per 2mg vial. Clinic protocols were $200-500/mo</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Ipamorelin -->
+      <div class="peptide-card" id="ipamorelin">
+        <div class="card-header">
+          <h3>4. Ipamorelin — Cleanest GH Secretagogue</h3>
+          <span class="badge badge-red">Gray Market</span>
+        </div>
+        <p>Selective growth hormone secretagogue. Stimulates pituitary GH release without spiking cortisol or prolactin. Cleanest option available.</p>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <label>Benefits</label>
+            <p>Lean muscle, fat loss, improved sleep, anti-aging, recovery. Fewer sides than other GH peptides</p>
+          </div>
+          <div class="detail-item">
+            <label>Side Effects</label>
+            <p>Mild: headache, lightheadedness, water retention. Less hunger than GHRP-6. Very clean</p>
+          </div>
+          <div class="detail-item">
+            <label>Dosing</label>
+            <p>100-300 mcg subQ, 1-3x daily (often before bed). 8-12 week cycles. Best with CJC-1295</p>
+          </div>
+          <div class="detail-item">
+            <label>Cost</label>
+            <p>$30-50 per 5mg vial (research grade)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. GHK-Cu -->
+      <div class="peptide-card" id="ghkcu">
+        <div class="card-header">
+          <h3>5. GHK-Cu — Copper Peptide</h3>
+          <span class="badge badge-green">OTC (Topical)</span>
+        </div>
+        <p>Naturally occurring tripeptide bound to copper. Your body makes it — 200 ng/mL at age 20, drops to 80 ng/mL by 60. Stimulates collagen, antioxidant activity, wound healing. Outperformed vitamin C cream AND retinoic acid for collagen in a 12-week trial.</p>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <label>Benefits</label>
+            <p>Skin tightening, wound healing, hair growth, reduced wrinkles, improved skin density/thickness</p>
+          </div>
+          <div class="detail-item">
+            <label>Side Effects</label>
+            <p>Very safe. No significant issues in topical or wound studies. Injectable: mild site reactions possible</p>
+          </div>
+          <div class="detail-item">
+            <label>Dosing</label>
+            <p>Topical: 2-10% concentration (4% daily). Injectable: 1-2 mg/day subQ. Oral: 120 mcg 1-2x daily</p>
+          </div>
+          <div class="detail-item">
+            <label>Cost</label>
+            <p>Topical: $20-80. Injectable: $30-50 per 50mg vial. Buy topical from The Ordinary, NIOD, Amazon</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Thymosin Alpha-1 -->
+      <div class="peptide-card" id="thymosin">
+        <div class="card-header">
+          <h3>6. Thymosin Alpha-1 — Immune Modulator</h3>
+          <span class="badge badge-orange">Compoundable (Cat 1)</span>
+        </div>
+        <p>Naturally produced in thymus gland. Regulates immune function. Enhances T-cells, dendritic cells, immune surveillance. Approved in 35+ countries as Zadaxin. One of the few wellness peptides still legally compoundable in the US.</p>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <label>Benefits</label>
+            <p>Immune modulation, chronic infection support (Hep B/C, Lyme), cancer adjunct, reduced inflammation</p>
+          </div>
+          <div class="detail-item">
+            <label>Side Effects</label>
+            <p>Mild injection site reactions, rare rash. One of the safest peptides</p>
+          </div>
+          <div class="detail-item">
+            <label>Dosing</label>
+            <p>1.6 mg subQ, 2x/week. Daily during acute illness. 4-12 week cycles</p>
+          </div>
+          <div class="detail-item">
+            <label>Cost</label>
+            <p>$150-400/mo compounding pharmacies. Research: $40-70 per 5mg vial</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Semaglutide / Tirzepatide -->
+      <div class="peptide-card" id="glp1">
+        <div class="card-header">
+          <h3>7. Semaglutide & Tirzepatide — GLP-1 Agonists</h3>
+          <span class="badge badge-green">FDA Approved</span>
+        </div>
+        <p><strong>Semaglutide</strong> (Ozempic/Wegovy): GLP-1 receptor agonist. Regulates blood sugar, slows gastric emptying, kills appetite.<br>
+        <strong>Tirzepatide</strong> (Mounjaro/Zepbound): Dual GIP + GLP-1. Hits two receptors. Slightly better weight loss in head-to-head trials.</p>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <label>Benefits</label>
+            <p>15-25%+ body weight loss, improved insulin sensitivity, cardiovascular benefits, appetite suppression</p>
+          </div>
+          <div class="detail-item">
+            <label>Side Effects</label>
+            <p>Nausea (very common early), vomiting, diarrhea, constipation. Serious: pancreatitis, gallbladder, thyroid warning. Muscle loss without resistance training</p>
+          </div>
+          <div class="detail-item">
+            <label>Dosing</label>
+            <p>Sema: start 0.25mg/wk → up to 2.4mg. Tirz: start 2.5mg/wk → up to 15mg. Slow titration 4-8 weeks</p>
+          </div>
+          <div class="detail-item">
+            <label>Cost</label>
+            <p>Brand: $800-1,300/mo (insurance may cover). Compounded: $200-500/mo. Telehealth: $300-600/mo</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. PT-141 -->
+      <div class="peptide-card" id="pt141">
+        <div class="card-header">
+          <h3>8. PT-141 — Bremelanotide (Vyleesi)</h3>
+          <span class="badge badge-green">FDA Approved</span>
+        </div>
+        <p>Melanocortin receptor agonist. Works in the brain on desire itself — not blood flow like Viagra/Cialis. Effective for men who don't respond to PDE-5 inhibitors.</p>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <label>Benefits</label>
+            <p>Increased sexual desire/arousal (men and women). Works on desire pathways, not just blood flow</p>
+          </div>
+          <div class="detail-item">
+            <label>Side Effects</label>
+            <p>Nausea (40%), flushing (20%), injection site (13%), headache (11%). Skin darkening with repeated use. Pre-treat with Zofran</p>
+          </div>
+          <div class="detail-item">
+            <label>Dosing</label>
+            <p>1.75 mg subQ, 45+ min before activity. Max 1x/24hr. Max 8 injections/month</p>
+          </div>
+          <div class="detail-item">
+            <label>Cost</label>
+            <p>Vyleesi brand: ~$900/mo. Compounded: $100-250/mo. Research: $25-40 per 10mg vial</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. Sermorelin -->
+      <div class="peptide-card" id="sermorelin">
+        <div class="card-header">
+          <h3>9. Sermorelin — The Legal GH Option</h3>
+          <span class="badge badge-orange">Compoundable (Rx)</span>
+        </div>
+        <p>Synthetic GHRH (first 29 amino acids). Oldest and most studied GH peptide. Works with your body's natural feedback — won't suppress natural GH like exogenous HGH. More legally accessible than CJC/Ipamorelin.</p>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <label>Benefits</label>
+            <p>Increased GH, improved sleep, fat loss, lean muscle, recovery, skin quality, energy</p>
+          </div>
+          <div class="detail-item">
+            <label>Side Effects</label>
+            <p>Mild: flushing, headache, dizziness, injection site reactions. Less water retention than direct GH</p>
+          </div>
+          <div class="detail-item">
+            <label>Dosing</label>
+            <p>200-300 mcg subQ before bed. 3-6 month cycles. Some do 5 on / 2 off</p>
+          </div>
+          <div class="detail-item">
+            <label>Cost</label>
+            <p>$150-400/mo clinics/compounding. Research: $25-45 per 2mg vial</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. DSIP -->
+      <div class="peptide-card" id="dsip">
+        <div class="card-header">
+          <h3>10. DSIP — Delta Sleep-Inducing Peptide</h3>
+          <span class="badge badge-red">Research Only</span>
+        </div>
+        <p>Naturally occurring neuropeptide. First isolated 1977 from rabbit brains during slow-wave sleep. Enhances delta (deep) sleep in the hypothalamus.</p>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <label>Benefits</label>
+            <p>Improved deep sleep, faster sleep onset, antioxidant, cortisol reduction, pain reduction</p>
+          </div>
+          <div class="detail-item">
+            <label>Side Effects</label>
+            <p>Fatigue/grogginess if dose too high, headache, dizziness. No significant adverse effects in studies</p>
+          </div>
+          <div class="detail-item">
+            <label>Dosing</label>
+            <p>100-300 mcg subQ, 30-60 min before bed. Start 100 mcg, titrate up. 2-4 weeks on, 2 off</p>
+          </div>
+          <div class="detail-item">
+            <label>Cost</label>
+            <p>$25-50 per 5mg vial (research grade only)</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- STACKS -->
+<section id="stacks">
+  <div class="container">
+    <h2>Practical Stacks</h2>
+    <div class="stack-card">
+      <h3>Recovery / Healing Stack</h3>
+      <p>BPC-157 (250-500 mcg/day) + TB-500 (750 mcg 2x/week) — 8-12 weeks</p>
+    </div>
+    <div class="stack-card">
+      <h3>GH Optimization Stack</h3>
+      <p>CJC-1295 no DAC (100 mcg) + Ipamorelin (200 mcg) before bed — 8-12 weeks. <strong>Legal alternative:</strong> Sermorelin (300 mcg) before bed</p>
+    </div>
+    <div class="stack-card">
+      <h3>Anti-Aging Stack</h3>
+      <p>GHK-Cu topical (daily) + Thymosin Alpha-1 (1.6 mg 2x/week) + GH stack above</p>
+    </div>
+    <div class="stack-card">
+      <h3>Sleep Stack</h3>
+      <p>DSIP (100-200 mcg) before bed</p>
+    </div>
+    <div class="stack-card">
+      <h3>Body Composition</h3>
+      <p>Semaglutide or Tirzepatide (prescription) + resistance training + high protein diet</p>
+    </div>
+  </div>
+</section>
+
+<!-- LEGAL TABLE -->
+<section id="legal">
+  <div class="container">
+    <h2>Legal Status — Quick Reference</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Peptide</th><th>Status</th><th>How to Get</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>BPC-157</td><td><span class="badge badge-red">Gray Market</span></td><td>Research vendors</td></tr>
+          <tr><td>TB-500</td><td><span class="badge badge-red">Gray Market</span></td><td>Research vendors</td></tr>
+          <tr><td>CJC-1295</td><td><span class="badge badge-red">Gray Market</span></td><td>Research vendors</td></tr>
+          <tr><td>Ipamorelin</td><td><span class="badge badge-red">Gray Market</span></td><td>Research vendors</td></tr>
+          <tr><td>GHK-Cu</td><td><span class="badge badge-green">OTC (topical)</span></td><td>Skincare retailers / Research vendors</td></tr>
+          <tr><td>Thymosin Alpha-1</td><td><span class="badge badge-orange">Compoundable</span></td><td>Compounding pharmacies with Rx</td></tr>
+          <tr><td>Semaglutide</td><td><span class="badge badge-green">FDA Approved</span></td><td>Any prescriber, telehealth</td></tr>
+          <tr><td>Tirzepatide</td><td><span class="badge badge-green">FDA Approved</span></td><td>Any prescriber, telehealth</td></tr>
+          <tr><td>PT-141</td><td><span class="badge badge-green">FDA Approved</span></td><td>Prescriber, telehealth (off-label men)</td></tr>
+          <tr><td>Sermorelin</td><td><span class="badge badge-orange">Compoundable</span></td><td>Compounding pharmacies, telehealth</td></tr>
+          <tr><td>DSIP</td><td><span class="badge badge-red">Research Only</span></td><td>Research vendors only</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="margin-top:28px; color: var(--gold);">Reputable Research Vendors</h3>
+    <p style="font-size:0.88rem; color: var(--text-muted); margin-bottom:10px;">Always verify: third-party COAs, >98% purity, US-based GMP production.</p>
+    <ul class="vendor-list">
+      <li><strong>Peptide Sciences</strong> — peptidesciences.com. Well-established, COAs available</li>
+      <li><strong>Core Peptides</strong> — corepeptides.com. US-made, COAs</li>
+      <li><strong>Biotech Peptides</strong> — biotechpeptides.com. Credit cards accepted, US-made</li>
+      <li><strong>Limitless Life Nootropics</strong> — Transparent documentation</li>
+      <li><strong>Amino Asylum</strong> — Budget option, mixed reviews on purity</li>
+    </ul>
+    <p style="font-size:0.88rem; margin-top:12px;">For FDA-approved peptides, skip research vendors. Go through a licensed prescriber or telehealth (Ro, Hims, Found, Calibrate, Push Health).</p>
+  </div>
+</section>
+
+<!-- GROCERY LIST -->
+<section id="grocery">
+  <div class="container">
+    <h2>Health Protocol — Grocery List</h2>
+    <p style="color: var(--text-muted); margin-bottom: 24px;">Take this to the store. Click checkboxes as you shop.</p>
+
+    <div class="grocery-section">
+      <h3>Proteins (Lean / High Quality)</h3>
+      <div class="grocery-grid">
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Chicken breast (boneless, skinless) <span class="note">3-4 lbs</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Ground turkey (93/7 lean) <span class="note">2 lbs</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Wild-caught salmon fillets <span class="note">2 lbs</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Shrimp (raw, deveined) <span class="note">1 lb</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Grass-fed ground beef (90/10) <span class="note">2 lbs</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Sirloin or flank steak <span class="note">2 lbs</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Whole eggs (pasture-raised) <span class="note">2 dozen</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Egg whites (carton) <span class="note">32 oz</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Bone broth (chicken or beef) <span class="note">2 cartons — gut + collagen</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Canned wild tuna (in water) <span class="note">4 cans</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Canned sardines (in olive oil) <span class="note">2 cans — omega-3</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Greek yogurt (plain, full/2%) <span class="note">32 oz</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Cottage cheese (low fat) <span class="note">16 oz</span></span></div>
+      </div>
+    </div>
+
+    <div class="grocery-section">
+      <h3>Complex Carbs</h3>
+      <div class="grocery-grid">
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Sweet potatoes <span class="note">4-5</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>White rice (jasmine/basmati) <span class="note">5 lb bag</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Oats (old-fashioned rolled) <span class="note">42 oz</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Quinoa <span class="note">1 lb bag</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Ezekiel bread (sprouted) <span class="note">1 loaf</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Bananas <span class="note">1 bunch — pre/post workout</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Red potatoes <span class="note">3 lbs</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Black beans (canned, low sodium) <span class="note">4 cans</span></span></div>
+      </div>
+    </div>
+
+    <div class="grocery-section">
+      <h3>Healthy Fats</h3>
+      <div class="grocery-grid">
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Extra virgin olive oil <span class="note">1 bottle</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Avocados <span class="note">6</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Avocado oil <span class="note">1 bottle — high-heat cooking</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Raw almonds <span class="note">1 lb bag</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Walnuts <span class="note">8 oz — omega-3, brain health</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Peanut or almond butter (natural) <span class="note">1 jar</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Chia seeds <span class="note">12 oz bag</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Ground flaxseed <span class="note">16 oz bag</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Ghee (grass-fed) <span class="note">1 jar</span></span></div>
+      </div>
+    </div>
+
+    <div class="grocery-section">
+      <h3>Vegetables (Anti-Inflammatory + Gut Health)</h3>
+      <div class="grocery-grid">
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Baby spinach <span class="note">2 large containers</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Broccoli <span class="note">2-3 crowns</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Asparagus <span class="note">2 bunches</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Brussels sprouts <span class="note">1 lb</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Kale (lacinato) <span class="note">1 bunch</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Bell peppers (red, yellow) <span class="note">4</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Zucchini <span class="note">3-4</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Cauliflower <span class="note">1 head</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Red onions <span class="note">3</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Fresh garlic <span class="note">1 bag — anti-inflammatory</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Fresh ginger root <span class="note">1 large piece</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Fresh turmeric root <span class="note">1 piece (if available)</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Celery <span class="note">1 bunch</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Cucumber <span class="note">2</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Mixed greens <span class="note">1 large container</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Sauerkraut (raw, refrigerated) <span class="note">1 jar — probiotics</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Kimchi <span class="note">1 jar — probiotics</span></span></div>
+      </div>
+    </div>
+
+    <div class="grocery-section">
+      <h3>Fruits</h3>
+      <div class="grocery-grid">
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Blueberries <span class="note">2 pints — antioxidant king</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Strawberries <span class="note">1 pint</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Lemons <span class="note">6 — water, cooking, vitamin C</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Limes <span class="note">4</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Green apples <span class="note">4</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Frozen mixed berries <span class="note">1 large bag — smoothies</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Pomegranate seeds <span class="note">1 container (if in season)</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Tart cherry juice (100%, no sugar) <span class="note">1 bottle — recovery, sleep</span></span></div>
+      </div>
+    </div>
+
+    <div class="grocery-section">
+      <h3>Supplements / Superfoods</h3>
+      <div class="grocery-grid">
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Whey protein isolate <span class="note">1 tub</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Creatine monohydrate <span class="note">1 container — 5g/day non-negotiable</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Magnesium glycinate <span class="note">1 bottle — sleep, recovery, 400mg/day</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Vitamin D3 + K2 <span class="note">1 bottle — 5000 IU daily</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Omega-3 fish oil (high EPA/DHA) <span class="note">1 bottle</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Zinc <span class="note">1 bottle — immune, testosterone</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Ashwagandha (KSM-66) <span class="note">1 bottle — cortisol, stress</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Turmeric/curcumin (with piperine) <span class="note">1 bottle</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Psyllium husk <span class="note">1 canister — fiber, gut</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Apple cider vinegar (raw, with mother) <span class="note">1 bottle</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Collagen peptides powder <span class="note">1 container — joints, skin, gut</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Probiotic (multi-strain, 50B+ CFU) <span class="note">1 bottle</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Electrolyte packets (LMNT etc.) <span class="note">1 box</span></span></div>
+      </div>
+    </div>
+
+    <div class="grocery-section">
+      <h3>Hydration / Drinks</h3>
+      <div class="grocery-grid">
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Filter pitcher (if needed)</span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Green tea bags or matcha <span class="note">1 box</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Black coffee (whole bean/ground) <span class="note">1 bag</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Sparkling water <span class="note">1 case — no sodium, no sweetener</span></span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Coconut water (no sugar) <span class="note">4 pack</span></span></div>
+      </div>
+    </div>
+
+    <div class="grocery-section">
+      <h3>Cooking Staples (if running low)</h3>
+      <div class="grocery-grid">
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Himalayan pink salt or sea salt</span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Black peppercorns + grinder</span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Red pepper flakes</span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Cumin</span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Smoked paprika</span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Oregano</span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Everything bagel seasoning</span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Low-sodium soy sauce or coconut aminos</span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Hot sauce (Frank's or similar)</span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Dijon mustard</span></div>
+        <div class="grocery-item"><div class="check" onclick="this.classList.toggle('checked')"></div><span>Balsamic vinegar</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MACROS -->
+<section id="macros">
+  <div class="container">
+    <h2>Daily Nutrition Targets</h2>
+    <div class="table-wrap">
+      <table class="macro-table">
+        <thead>
+          <tr><th>Goal</th><th>Protein</th><th>Carbs</th><th>Fats</th><th>Calories</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Fat loss + muscle retention</td><td>1g/lb BW</td><td>1-1.5g/lb</td><td>0.3-0.4g/lb</td><td>Deficit 300-500</td></tr>
+          <tr><td>Maintenance / recomp</td><td>1g/lb BW</td><td>1.5-2g/lb</td><td>0.35-0.45g/lb</td><td>Maintenance</td></tr>
+          <tr><td>Muscle gain</td><td>1-1.2g/lb BW</td><td>2-2.5g/lb</td><td>0.4-0.5g/lb</td><td>Surplus 200-300</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="nonneg">
+      <h3>Non-Negotiables (Regardless of Goal)</h3>
+      <ul>
+        <li>1g protein per lb body weight minimum</li>
+        <li>5g creatine daily</li>
+        <li>25-35g fiber daily</li>
+        <li>3-4L water daily</li>
+        <li>Magnesium before bed</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Peptides & Health Protocol — Built by Sinton.ia — Feb 25, 2026</p>
+    <p style="margin-top:6px;">Sources: Peptide Sciences, OptimaNtra, FDA 503A List, Mayo Clinic, PMC, Peptide Laws, The Peptide Guides, Atria, Eric Topol</p>
+  </div>
+</footer>
+
+</body>
+</html>
