@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Casa Cuervo - Peter's personal hub. Products, family, tools, and everything that matters.">
+    <title>Casa Cuervo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #0D0D0D;
+            --green: #006847;
+            --green-light: #008C5E;
+            --red: #C41E3A;
+            --red-dark: #9B1B30;
+            --white: #FFFFFF;
+            --offwhite: #FAFAFA;
+            --gold: #D4A017;
+            --charcoal: #2C2C2C;
+            --text-light: #6B6B6B;
+            --border: #E0E0E0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Nunito', sans-serif; background: var(--white); color: var(--charcoal); }
+        a { color: var(--green); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* === NAV === */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(13,13,13,0.95); backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto; padding: 0 24px;
+            display: flex; align-items: center; justify-content: space-between; height: 60px;
+        }
+        .nav-logo { font-family: 'Playfair Display', serif; font-size: 20px; color: #fff; font-weight: 700; }
+        .nav-logo .green { color: var(--green-light); }
+        .nav-logo .red { color: var(--red); }
+        .nav-links { display: none; gap: 0; align-items: center; }
+        .nav-link {
+            padding: 18px 14px; color: rgba(255,255,255,0.5); font-size: 12px;
+            font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent;
+            transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.5px;
+            text-decoration: none;
+        }
+        .nav-link:hover { color: rgba(255,255,255,0.8); text-decoration: none; }
+        .nav-link.active { color: #fff; border-bottom-color: var(--green-light); }
+
+        .nav-hamburger {
+            display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px;
+        }
+        .nav-hamburger span {
+            width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.3s;
+        }
+        .nav-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+        .nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        .nav-mobile {
+            display: none; position: fixed; top: 60px; left: 0; right: 0;
+            background: rgba(13,13,13,0.98); backdrop-filter: blur(12px);
+            padding: 8px 0; z-index: 999; border-bottom: 1px solid rgba(255,255,255,0.08);
+            max-height: calc(100vh - 60px); overflow-y: auto;
+        }
+        .nav-mobile.open { display: block; }
+        .nav-mobile-link {
+            display: block; padding: 14px 24px; color: rgba(255,255,255,0.6);
+            font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+            border-left: 3px solid transparent; text-decoration: none;
+        }
+        .nav-mobile-link:hover { color: #fff; background: rgba(0,104,71,0.15); border-left-color: var(--green-light); text-decoration: none; }
+
+        @media (min-width: 901px) {
+            .nav-links { display: flex; }
+            .nav-hamburger { display: none; }
+        }
+
+        /* === SECTIONS === */
+        section { scroll-margin-top: 60px; }
+
+        /* === HERO === */
+        .hero {
+            min-height: 55vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            background: var(--black); color: #fff; padding: 100px 24px 40px;
+            position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                linear-gradient(135deg, rgba(0,104,71,0.12) 0%, transparent 40%),
+                linear-gradient(225deg, rgba(196,30,58,0.12) 0%, transparent 40%);
+        }
+        .hero-img {
+            width: 120px; height: 120px; border-radius: 50%; margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--green), var(--red));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 56px; position: relative; z-index: 1;
+            box-shadow: 0 0 40px rgba(0,104,71,0.3), 0 0 40px rgba(196,30,58,0.3);
+        }
+        .hero h1 {
+            font-family: 'Playfair Display', serif; font-size: clamp(42px, 8vw, 72px);
+            font-weight: 900; letter-spacing: -1px; position: relative;
+        }
+        .hero h1 .green { color: var(--green-light); }
+        .hero h1 .white { color: #fff; }
+        .hero h1 .red { color: var(--red); }
+        .hero .tagline {
+            font-size: 18px; color: rgba(255,255,255,0.5); margin-top: 12px;
+            font-style: italic; font-family: 'Playfair Display', serif;
+        }
+        .hero .date-line {
+            margin-top: 20px; font-size: 14px; color: rgba(255,255,255,0.4);
+            font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+        }
+        .hero .gl-age {
+            margin-top: 8px; font-size: 16px; color: var(--gold); font-weight: 700;
+        }
+        .hero .flag-stripe {
+            position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--green) 33%, var(--white) 33%, var(--white) 66%, var(--red) 66%);
+        }
+
+        /* === QUICK LINKS === */
+        .quick-links {
+            background: var(--black); padding: 0 24px 40px; text-align: center;
+        }
+        .pill-bar {
+            display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+            max-width: 900px; margin: 0 auto;
+        }
+        .pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 18px; border-radius: 50px;
+            background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7);
+            font-size: 13px; font-weight: 600; transition: all 0.2s;
+            border: 1px solid rgba(255,255,255,0.08); text-decoration: none;
+        }
+        .pill:hover {
+            background: rgba(0,104,71,0.2); color: var(--green-light);
+            border-color: rgba(0,104,71,0.4); text-decoration: none;
+        }
+
+        /* === SECTION BANNERS (for DALL-E images) === */
+        .section-banner {
+            width: 100%; height: 200px; border-radius: 12px; margin-bottom: 28px;
+            background: linear-gradient(135deg, var(--green) 0%, var(--black) 50%, var(--red) 100%);
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.15); font-size: 14px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 2px; overflow: hidden;
+            position: relative;
+        }
+        .section-banner img {
+            width: 100%; height: 100%; object-fit: cover; position: absolute;
+            top: 0; left: 0;
+        }
+
+        /* === CONTENT SECTIONS === */
+        .section-title {
+            font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .section-subtitle {
+            color: var(--text-light); font-size: 15px; margin-bottom: 32px;
+        }
+        .content-section {
+            max-width: 1200px; margin: 0 auto; padding: 60px 24px;
+        }
+
+        /* === CARDS GRID === */
+        .cards {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: #fff; border-radius: 12px; padding: 28px;
+            border: 1px solid var(--border); transition: all 0.2s;
+            text-decoration: none; color: var(--charcoal); display: block;
+        }
+        .card:hover {
+            transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            border-color: var(--green); text-decoration: none;
+        }
+        .card-icon { font-size: 32px; margin-bottom: 12px; }
+        .card-title {
+            font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .card-desc { font-size: 14px; color: var(--text-light); line-height: 1.5; }
+        .card-tag {
+            display: inline-block; margin-top: 12px; padding: 4px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .tag-live { background: rgba(0,104,71,0.1); color: var(--green); }
+        .tag-soon { background: rgba(212,160,23,0.1); color: var(--gold); }
+        .tag-crew { background: rgba(196,30,58,0.1); color: var(--red); }
+
+        /* === EDGE CREW SPECIAL === */
+        .card-crew {
+            border: 2px solid var(--red); background: linear-gradient(135deg, #fff 0%, #FFF5F5 100%);
+        }
+        .card-crew:hover { border-color: var(--red); box-shadow: 0 8px 24px rgba(196,30,58,0.15); }
+
+        /* === DIVIDER === */
+        .divider {
+            max-width: 1200px; margin: 0 auto; padding: 0 24px;
+        }
+        .divider hr {
+            border: none; border-top: 1px solid var(--border);
+        }
+
+        /* === FOOTER === */
+        .footer {
+            background: var(--black); color: rgba(255,255,255,0.4);
+            text-align: center; padding: 40px 24px;
+            font-size: 14px; position: relative;
+        }
+        .footer .green { color: var(--green-light); }
+        .footer .red { color: var(--red); }
+        .footer .flag-stripe {
+            position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--green) 33%, var(--white) 33%, var(--white) 66%, var(--red) 66%);
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 600px) {
+            .cards { grid-template-columns: 1fr; }
+            .pill-bar { gap: 8px; }
+            .pill { padding: 6px 14px; font-size: 12px; }
+            .content-section { padding: 40px 16px; }
+            .section-banner { height: 140px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+    <div class="nav-inner">
+        <div class="nav-logo"><span class="green">Casa</span> <span class="red">Cuervo</span></div>
+        <div class="nav-links">
+            <a href="#products" class="nav-link">Products</a>
+            <a href="#edge-crew" class="nav-link">Edge Crew</a>
+            <a href="#family" class="nav-link">Family</a>
+            <a href="#life" class="nav-link">Life</a>
+            <a href="#tools" class="nav-link">Tools</a>
+        </div>
+        <div class="nav-hamburger" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+</nav>
+<div class="nav-mobile" id="mobileNav">
+    <a href="#products" class="nav-mobile-link" onclick="closeMenu()">Products</a>
+    <a href="#edge-crew" class="nav-mobile-link" onclick="closeMenu()">Edge Crew</a>
+    <a href="#family" class="nav-mobile-link" onclick="closeMenu()">Family</a>
+    <a href="#life" class="nav-mobile-link" onclick="closeMenu()">Life</a>
+    <a href="#tools" class="nav-mobile-link" onclick="closeMenu()">Tools</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-img">🏠</div>
+    <h1><span class="green">Casa</span> <span class="red">Cuervo</span></h1>
+    <div class="tagline">Where the Wind Smells Like Roses</div>
+    <div class="date-line" id="liveDate"></div>
+    <div class="gl-age" id="glAge"></div>
+    <div class="flag-stripe"></div>
+</section>
+
+<!-- QUICK LINKS -->
+<div class="quick-links">
+    <div class="pill-bar">
+        <a href="https://outlook.office.com" target="_blank" class="pill">C365 Email</a>
+        <a href="https://mail.google.com" target="_blank" class="pill">Personal Email</a>
+        <a href="https://github.com/simplebalance89-ai" target="_blank" class="pill">GitHub</a>
+        <a href="https://portal.azure.com" target="_blank" class="pill">Azure</a>
+        <a href="https://dashboard.render.com" target="_blank" class="pill">Render</a>
+        <a href="https://track.toggl.com" target="_blank" class="pill">Toggl</a>
+        <a href="https://calendar.google.com" target="_blank" class="pill">Calendar</a>
+        <a href="https://www.hardrockbet.com" target="_blank" class="pill">Hard Rock Bet</a>
+        <a href="https://drive.proton.me" target="_blank" class="pill">Proton Drive</a>
+        <a href="https://www.zillow.com" target="_blank" class="pill">Zillow</a>
+    </div>
+</div>
+
+<!-- PRODUCTS -->
+<section id="products" class="content-section">
+    <div class="section-banner">
+        <!-- DALL-E: products-banner.png -->
+        PRODUCTS BANNER
+    </div>
+    <h2 class="section-title">Products</h2>
+    <p class="section-subtitle">Built by Peter. Powered by Sinton.ia.</p>
+    <div class="cards">
+        <a href="https://simplebalance89-ai.github.io/casa-companion-site/" target="_blank" class="card">
+            <div class="card-icon">🧸</div>
+            <div class="card-title">Casa Companion</div>
+            <div class="card-desc">AI plush toy that tells bedtime stories in your voice. 10 companions, all languages.</div>
+            <div class="card-tag tag-live">Live</div>
+        </a>
+        <a href="https://simple-balance-demo.onrender.com" target="_blank" class="card">
+            <div class="card-icon">🎵</div>
+            <div class="card-title">Simple Balance Music</div>
+            <div class="card-desc">Production suite demo. Beats, mixing, and sound design powered by AI.</div>
+            <div class="card-tag tag-live">Live</div>
+        </a>
+        <a href="https://edge-finder-demo.onrender.com" target="_blank" class="card">
+            <div class="card-icon">📊</div>
+            <div class="card-title">Edge Finder</div>
+            <div class="card-desc">Sports analytics platform. Find edges the market misses.</div>
+            <div class="card-tag tag-live">Live</div>
+        </a>
+        <div class="card" style="opacity: 0.6; cursor: default;">
+            <div class="card-icon">🐢</div>
+            <div class="card-title">Hatchling Beach</div>
+            <div class="card-desc">Coming soon. Kid-safe educational world with guided adventures.</div>
+            <div class="card-tag tag-soon">Coming Soon</div>
+        </div>
+    </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- EDGE CREW -->
+<section id="edge-crew" class="content-section">
+    <div class="section-banner" style="background: linear-gradient(135deg, var(--red-dark) 0%, var(--black) 100%);">
+        <!-- DALL-E: edge-crew-banner.png -->
+        EDGE CREW BANNER
+    </div>
+    <h2 class="section-title">Edge Crew</h2>
+    <p class="section-subtitle">The crew's betting dashboard. Real lines, real edges.</p>
+    <div class="cards">
+        <a href="https://edge-crew.onrender.com" target="_blank" class="card card-crew">
+            <div class="card-icon">🎯</div>
+            <div class="card-title">Edge Crew Dashboard</div>
+            <div class="card-desc">Live lines, picks, and tracking for Peter, Chinny, and Jimmy. Real data, real money.</div>
+            <div class="card-tag tag-crew">Crew Only</div>
+        </a>
+    </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- FAMILY -->
+<section id="family" class="content-section">
+    <div class="section-banner" style="background: linear-gradient(135deg, var(--green) 0%, #004D34 100%);">
+        <!-- DALL-E: family-banner.png -->
+        FAMILY BANNER
+    </div>
+    <h2 class="section-title">Family</h2>
+    <p class="section-subtitle">The people who matter most.</p>
+    <div class="cards">
+        <a href="https://casa-cuervo.onrender.com" target="_blank" class="card">
+            <div class="card-icon">👶</div>
+            <div class="card-title">Gian Lucca</div>
+            <div class="card-desc" id="glCard">Story Buddy, Language Room, Sign Coach, Play Room, Growth Room, and The Record Player. All for GL.</div>
+            <div class="card-tag tag-live">Live</div>
+        </a>
+        <div class="card">
+            <div class="card-icon">💅</div>
+            <div class="card-title">Gladys Beauty</div>
+            <div class="card-desc">Lash services, client management, and booking. Gladys's business hub.</div>
+            <div class="card-tag tag-soon">Building</div>
+        </div>
+        <div class="card">
+            <div class="card-icon">🏠</div>
+            <div class="card-title">Casa Wilson Voice</div>
+            <div class="card-desc">Family voice assistant. Grocery lists, tasks, reminders, and household management.</div>
+            <div class="card-tag tag-soon">Building</div>
+        </div>
+    </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- LIFE -->
+<section id="life" class="content-section">
+    <div class="section-banner" style="background: linear-gradient(135deg, #1a1a1a 0%, var(--charcoal) 100%);">
+        <!-- DALL-E: life-banner.png -->
+        LIFE BANNER
+    </div>
+    <h2 class="section-title">Life</h2>
+    <p class="section-subtitle">The big moves.</p>
+    <div class="cards">
+        <a href="https://www.zillow.com/palm-springs-ca/" target="_blank" class="card">
+            <div class="card-icon">🏡</div>
+            <div class="card-title">Housing Search</div>
+            <div class="card-desc">Palm Springs and Big Bear. Finding the right spot for the family.</div>
+        </a>
+        <div class="card">
+            <div class="card-icon">💰</div>
+            <div class="card-title">Budget</div>
+            <div class="card-desc">Monthly budget, savings targets, and financial planning.</div>
+        </div>
+        <div class="card">
+            <div class="card-icon">💪</div>
+            <div class="card-title">Health Protocol</div>
+            <div class="card-desc">6-week protocol tracker. Nutrition, training, and recovery for Peter and Gladys.</div>
+        </div>
+    </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- TOOLS -->
+<section id="tools" class="content-section">
+    <div class="section-banner" style="background: linear-gradient(135deg, var(--black) 0%, var(--green) 50%, var(--red) 100%);">
+        <!-- DALL-E: tools-banner.png -->
+        TECH BANNER
+    </div>
+    <h2 class="section-title">Tech &amp; Tools</h2>
+    <p class="section-subtitle">The stack that runs everything.</p>
+    <div class="cards">
+        <a href="https://portal.azure.com" target="_blank" class="card">
+            <div class="card-icon">☁️</div>
+            <div class="card-title">Azure</div>
+            <div class="card-desc">AI services, voice agents, deployments, and infrastructure.</div>
+        </a>
+        <a href="https://dashboard.render.com" target="_blank" class="card">
+            <div class="card-icon">🚀</div>
+            <div class="card-title">Render</div>
+            <div class="card-desc">App hosting. Casa Companion, Simple Balance, Edge Finder, Edge Crew.</div>
+        </a>
+        <a href="https://github.com/simplebalance89-ai" target="_blank" class="card">
+            <div class="card-icon">🐙</div>
+            <div class="card-title">GitHub</div>
+            <div class="card-desc">All repos. Code, sites, and version control.</div>
+        </a>
+        <a href="https://streamlit.io" target="_blank" class="card">
+            <div class="card-icon">📱</div>
+            <div class="card-title">Streamlit</div>
+            <div class="card-desc">Rapid prototyping and internal tools.</div>
+        </a>
+        <a href="https://track.toggl.com" target="_blank" class="card">
+            <div class="card-icon">⏱️</div>
+            <div class="card-title">Toggl</div>
+            <div class="card-desc">Time tracking for every client engagement.</div>
+        </a>
+        <a href="https://tailscale.com" target="_blank" class="card">
+            <div class="card-icon">🔗</div>
+            <div class="card-title">Tailscale</div>
+            <div class="card-desc">Mesh VPN. Connects all machines securely.</div>
+        </a>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="flag-stripe"></div>
+    <span class="green">Casa</span> <span class="red">Cuervo</span> &middot; Built by Peter &middot; Powered by Sinton.ia
+</footer>
+
+<script>
+    // Mobile menu
+    function toggleMenu() {
+        document.querySelector('.nav-hamburger').classList.toggle('open');
+        document.getElementById('mobileNav').classList.toggle('open');
+    }
+    function closeMenu() {
+        document.querySelector('.nav-hamburger').classList.remove('open');
+        document.getElementById('mobileNav').classList.remove('open');
+    }
+
+    // Active nav on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(s => {
+            if (window.scrollY >= s.offsetTop - 120) current = s.getAttribute('id');
+        });
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+        });
+    });
+
+    // Live date
+    function updateDate() {
+        const now = new Date();
+        const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('liveDate').textContent = now.toLocaleDateString('en-US', opts);
+    }
+    updateDate();
+    setInterval(updateDate, 60000);
+
+    // GL age counter (DOB: July 27, 2025)
+    function updateGL() {
+        const dob = new Date(2025, 6, 27);
+        const now = new Date();
+        const diffMs = now - dob;
+        const days = Math.floor(diffMs / 86400000);
+        const months = Math.floor(days / 30.44);
+        const weeks = Math.floor(days / 7);
+        document.getElementById('glAge').textContent =
+            'Gian Lucca: ' + months + ' months, ' + weeks + ' weeks \u2022 Day ' + days + ' of 1,000';
+    }
+    updateGL();
+    setInterval(updateGL, 3600000);
+</script>
+</body>
+</html>
